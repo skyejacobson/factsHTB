@@ -3,7 +3,8 @@ Writeup of the seasonal Facts Hack the Box machine
 
 
 Initial nmap scan of the machine reveals 2 PoA being a HTTP site and SSH service being hosted.
-'''
+
+```
 ┌──(root㉿kali-linux-2024-2)-[/]
 └─# nmap -sV -sC 10.129.4.222
 Starting Nmap 7.98 ( https://nmap.org ) at 2026-02-16 22:56 -0600
@@ -22,4 +23,4 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 13.28 seconds
-'''
+```
