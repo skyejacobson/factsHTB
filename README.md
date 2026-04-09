@@ -24,3 +24,20 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 13.28 seconds
 ```
+
+Going to the website we find a trivia website -- nothing special however further enumeration with DirBuster shows us a hidden directory:
+
+```
+Starting dir/file list based brute forcing
+Dir found: /admin/forgot/ - 200
+Dir found: / - 200
+Dir found: /admin/ - 302
+File found: /admin/login - 200
+Dir found: /randomfacts/ - 403
+File found: /admin/forgot - 200
+Dir found: /.bash_history/ - 200
+Dir found: /.bashrc/ - 200
+File found: /welcome - 200
+```
+
+None of these are significant besides one ```/admin/login```
