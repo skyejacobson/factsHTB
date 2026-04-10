@@ -44,7 +44,7 @@ None of these are significant besides one: `/admin/login`. Going to that webpage
 
 Creating an account lets us analyze the behind the scenes of the website. Though we have an account there is no real access but -- scanning the page we see the backend is running `Copyright © 2015 - 2026 Camaleon CMS. Version 2.9.0`
 
-Research on `Camaleon v2.9.0 CVE` on google brings up [`CVE-2025-2304`](https://github.com/advisories/GHSA-rp28-mvq3-wf8j). Analysis of this CVE tells us that there is a severe vulnerability with the permit! function within the source code. Improper input validation allows for privilege escalation. Read more at the link above.
+Inputing `Camaleon v2.9.0 CVE` on google brings up [`CVE-2025-2304`](https://github.com/advisories/GHSA-rp28-mvq3-wf8j). Analysis of this CVE tells us that there is a severe vulnerability with the permit! function within the source code. Improper input validation allows for privilege escalation. Read more at the link above.
 
 We can look up the CVE with the attatched keywords of 'github' or 'POC' and find [`Alien0ne CVE-2025-2304`](https://github.com/Alien0ne/CVE-2025-2304) proof of concept. We can then clone the repository and execute using the required parameters.
 
