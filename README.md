@@ -40,7 +40,7 @@ Dir found: /.bashrc/ - 200
 File found: /welcome - 200
 ```
 
-None of these are significant besides one `/admin/login` going to that webpage we see a login with a sign up page.
+None of these are significant besides one: `/admin/login`. Going to that webpage we see a login with a sign up page.
 
 Creating an account lets us analyze the behind the scenes of the website. Though we have an account there is no real access but -- scanning the page we see the backend is running `Copyright © 2015 - 2026 Camaleon CMS. Version 2.9.0`
 
