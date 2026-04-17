@@ -1,4 +1,4 @@
-# factsHTB
+# FactsHTB
 Writeup of the seasonal Facts Hack the Box machine
 
 
