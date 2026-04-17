@@ -214,3 +214,18 @@ USER_FLAG_HERE
 trivia@facts:/home/william$ 
 ```
 
+With the user flag in hand we can now try standard Linux post-exploitation enumeration.
+
+```
+trivia@facts:/home/william$ sudo -l
+Matching Defaults entries for trivia on facts:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,
+    use_pty
+User trivia may run the following commands on facts:
+    (ALL) NOPASSWD: /usr/bin/facter
+```
+
+`sudo -l` shows us that user `trivia` can run facter via root. Facter is a lightweight, cross-platform command-line tool used in Linux (and other OSs) to collect and display system information, known as "facts," such as hardware, network settings, and operating system versions.
+
+Facter's `--custom-dir ` is notoriously abusable to allow for privilege escalation -- which can be used within the server.
