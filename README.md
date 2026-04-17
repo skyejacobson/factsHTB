@@ -196,3 +196,21 @@ The list of available updates is more than a week old.
 To check for new updates run: sudo apt update
 trivia@facts:~$ 
 ```
+
+Success. We can now enumerate the further to find the `user.txt` flag.
+
+```
+trivia@facts:~$ ls
+trivia@facts:~$ pwd
+/home/trivia
+trivia@facts:~$ cd ..
+trivia@facts:/home$ ls
+trivia  william
+trivia@facts:/home$ cd william
+trivia@facts:/home/william$ ls
+user.txt
+trivia@facts:/home/william$ cat user.txt
+USER_FLAG_HERE
+trivia@facts:/home/william$ 
+```
+
