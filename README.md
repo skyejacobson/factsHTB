@@ -142,9 +142,9 @@ william:x:1001:1001::/home/william:/bin/bash
 _laurel:x:101:988::/var/log/laurel:/bin/false
 ```
 
-2 users stand out in this passwd file -- `trivia` and `william`. `_laurel` likely relates to a logging software used to track movements within the system. If this were a real scenario be mindful of that is pertinent. 
+2 users stand out in this passwd file -- `trivia` and `william`. `_laurel` likely relates to a logging software used to track movements within the system. If this were a real scenario being mindful of that is pertinent. 
 
-We try to login via ssh but we need the passphrase or password to login. The passphrase can be obtained through decrypting the hash of the OPENSSH key.
+We can try to login via ssh but we need the passphrase or password to login. The passphrase can be obtained through decrypting the hash of the OPENSSH key.
 
 We could try both users but it's better practice to first meet some prerequisites. Firstly need to hash the openssh key and crack via john the ripper.
 
