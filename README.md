@@ -143,3 +143,6 @@ william:x:1001:1001::/home/william:/bin/bash
 _laurel:x:101:988::/var/log/laurel:/bin/false
 ```
 
+2 users stand out in this passwd file -- `trivia` and `william`. `_laurel` likely relates to a logging software used to track movements within the system. If this were a real scenario be mindful of that is pertinent. 
+
+We can try both users but first need to meet some prerequisites.
