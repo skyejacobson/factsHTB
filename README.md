@@ -96,7 +96,7 @@ OPENSSH_KEY_HERE
 
 Now that we can establish a ssh connection to the server there is still the missing piece of which user the key belongs to. 
 
-A quick search of Camaleon CMS v2.9.0 leads us to [`CVE-2024-46987`](https://nvd.nist.gov/vuln/detail/CVE-2024-46987). Research on this CVE tells us there is path traversal vulnerability accessible via MediaController's download_private_file method -- allowing authenticated users to download any file on the web server Camaleon CMS is running on (depending on the file permissions). This issue may lead to Information Disclosure.
+A quick search of Camaleon CMS v2.9.0 leads us to [`CVE-2024-46987`](https://nvd.nist.gov/vuln/detail/CVE-2024-46987). Research on this CVE tells us there is a path traversal vulnerability accessible via MediaController's download_private_file method -- allowing authenticated users to download any file on the web server Camaleon CMS is running on (depending on the file permissions). This issue may lead to Information Disclosure.
 
 Following a link rabbit hole takes us to [`owen2345 camaleon-cms Github`](https://github.com/owen2345/camaleon-cms/security/advisories/GHSA-cp65-5m9r-vc2c). Giving us a PoC exploit to use.
 
@@ -146,7 +146,7 @@ _laurel:x:101:988::/var/log/laurel:/bin/false
 
 We can try to login via ssh but we need the passphrase or password to login. The passphrase can be obtained through decrypting the hash of the OPENSSH key.
 
-We could try both users but it's better practice to first meet some prerequisites. Firstly need to hash the openssh key and crack via john the ripper.
+We could try both users but it's better practice to first meet some prerequisites. Firstly we need to hash the openssh key and crack via john the ripper.
 
 ```
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
