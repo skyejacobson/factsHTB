@@ -48,7 +48,7 @@ Inputing `Camaleon v2.9.0 CVE` on google brings up [`CVE-2025-2304`](https://git
 
 We can look up the CVE with the attatched keywords of 'github' or 'POC' and find [`Alien0ne CVE-2025-2304`](https://github.com/Alien0ne/CVE-2025-2304) proof of concept. We can then clone the repository and execute using the required parameters.
 
-**NOTE All though not necessary -- its imparative that if you want to remain admin -- vim into the `exploit.py` file and comment out the user role revert function to log back in after running the exploit.**
+**NOTE All though not necessary -- its imperative that if you want to remain admin -- vim into the `exploit.py` file and comment out the user role revert function to log back in after running the exploit.**
 
 ```
 ┌──(root㉿kali-linux-2024-2)-[/home/parallels/Documents/FactsHTB/CVE-2025-2304]
